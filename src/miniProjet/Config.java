@@ -19,24 +19,35 @@ public class Config {
 	public int getNA(){
 		return nA;
 	}
+	public int getP(){
+		return p;
+	}
 	
-	public boolean isValid(GrapheConfig gc)
+	public boolean isValid(GraphConfig gc)
 	{
 		if(nA == nE || nE == gc.getN() || nE == 0)
 			return true;
 		return false;
 	}
 	
-	public boolean isNextTo(Config c, GrapheConfig gc)
+	public boolean isNextTo(Config c, GraphConfig gc)
 	{
-		if(nE == c.getNE() && nA > c.getNA && (nA - c.getNA <= gc.getK()))
-			return true;
-		else if(nE - c.getNE() == nA - c.getNA() && nA - c.getNA() > 0 && nA - c.getNA() >= k)
-			return true;
-		else if()
-			
-		else
+		if(p == c.getP())
 			return false;
 		
+		if(nE == c.getNE()
+				&& nA > c.getNA()
+				&& (nA - c.getNA() <= gc.getK()))
+			return true;
+		else if(nE - c.getNE() == nA - c.getNA()
+				&& nA - c.getNA() > 0
+				&& nA - c.getNA() <= gc.getK()/2)
+			return true;
+		else
+			return false;
+	}
+	
+	public String toString(){
+		return "("+nE+", "+nA+", "+p+")";
 	}
 }
