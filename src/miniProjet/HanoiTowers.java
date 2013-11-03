@@ -27,7 +27,7 @@ public class HanoiTowers {
 		string += sequence.toString();
 		string += "\n";
 		
-		string += "Traversee() :\n";
+		string += "Parcours en largeur du graphe :\n";
 		string += gc.breadthFirstSearch().toString();
 		string += "\n";
 		
