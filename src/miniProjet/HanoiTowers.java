@@ -33,6 +33,16 @@ public class HanoiTowers {
 		
 		string += "Traversee() :\n";
 		string += gc.traversee().toString();
+		string += "\n";
+		
+		/*long[] tab = new long[10];
+		for(int n=3; n<10; n++)
+		{
+			long startTime = System.currentTimeMillis();
+			gc = new GraphConfig(n,4);
+			gc.traversee();
+			long Time = System.currentTimeMillis();
+		}*/
 		
 		System.out.println(string);
 	}

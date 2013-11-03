@@ -82,9 +82,8 @@ public class GraphConfig {
 		return new Sequence(l);
 	}
 	
-	public Sequence traversee(){
-		
-		
+	public Sequence traversee()
+	{
 		LinkedList<Config> f = new LinkedList<Config>();
 		ArrayList<Config> l = new ArrayList<Config>();
 		HashMap<String,Integer> visited = new HashMap<String,Integer>();
@@ -122,21 +121,20 @@ public class GraphConfig {
 		ArrayList<Config> l2 = new ArrayList<Config>();
 		
 		if(actualInt == null){
-			//System.out.println("ERROR");
-			return null;
+			return new Sequence(null);
 		}
 		l2.add(x);
-		System.out.println("Try1");
+		//System.out.println("Try1");
 		lastInt = visited.get(x.toKey());
 		while(lastInt != 0)
 		{
-			min = lastInt;
 			for (Config y : x.generateNext(this))
 			{
 				actualInt = visited.get(y.toKey());
-				if(min > actualInt){
-					min = actualInt;
+				System.out.println(actualInt);
+				if(lastInt == actualInt+1){
 					x = y;
+					break;
 				}
 			}
 			l2.add(x);
