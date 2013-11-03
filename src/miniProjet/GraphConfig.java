@@ -131,7 +131,7 @@ public class GraphConfig {
 			for (Config y : x.generateNext(this))
 			{
 				actualInt = visited.get(y.toKey());
-				System.out.println(actualInt);
+				//System.out.println(actualInt);
 				if(lastInt == actualInt+1){
 					x = y;
 					break;

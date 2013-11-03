@@ -1,5 +1,8 @@
 package miniProjet;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 public class HanoiTowers {
 
 	public static void main(String[] args)
@@ -9,7 +12,7 @@ public class HanoiTowers {
 		Sequence sequence;
 		Config departure = new Config(0,1,false);
 		Config arrival = new Config(3,0,true);
-		
+	
 		GraphConfig gc = new GraphConfig(3,2);
 		string += "Création d'"+ gc.toString() + ".\n\n";
 		
@@ -35,16 +38,37 @@ public class HanoiTowers {
 		string += gc.traversee().toString();
 		string += "\n";
 		
-		/*long[] tab = new long[10];
-		for(int n=3; n<10; n++)
-		{
-			long startTime = System.currentTimeMillis();
-			gc = new GraphConfig(n,4);
-			gc.traversee();
-			long Time = System.currentTimeMillis();
-		}*/
-		
+		string += "Courbe :\n";
+		HanoiTowers.generateCurveCPU(1500);
 		System.out.println(string);
+	}
+	
+	public static void generateCurveCPU(int maxN)
+	{
+		long[] tab = new long[maxN];
+		long startTime, endTime;
+		GraphConfig gc;
+		for(int n=3; n < maxN; n++)
+		{
+			gc = new GraphConfig(n,4);
+
+			startTime = System.nanoTime();
+			gc.traversee();
+			endTime = System.nanoTime();
+			
+			tab[n] = endTime - startTime;
+		}
+		
+		String fileName = "./data/data.txt";
+	    try{
+	      PrintWriter out  = new PrintWriter(new FileWriter(fileName));
+	      for (int n = 3; n < tab.length; n++)
+	        out.println(n + ";" + tab[n]);
+	      out.close();
+	    }
+	    catch(Exception e){
+	      e.printStackTrace();
+	    }
 	}
 
 }
