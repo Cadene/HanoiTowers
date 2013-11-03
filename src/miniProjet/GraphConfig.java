@@ -1,6 +1,9 @@
 package miniProjet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class GraphConfig {
 	
@@ -20,7 +23,7 @@ public class GraphConfig {
 		return k;
 	}
 	
-	public ArrayList<Config> allValidConfigs()
+	public ArrayList<Config> generateValidConfigs()
 	{
 		ArrayList<Config> configs = new ArrayList<Config>();
 		Config earth;
@@ -29,8 +32,8 @@ public class GraphConfig {
 		for(int nE=0; nE<=n; nE++){
 			for(int nA=0; nA<=n; nA++){
 				
-				earth = new Config(nE,nA,0);
-				island = new Config(nE,nA,1);
+				earth = new Config(nE,nA,false);
+				island = new Config(nE,nA,true);
 				
 				if(nE==0 && nA==0)
 					configs.add(earth);
@@ -48,25 +51,103 @@ public class GraphConfig {
 		return configs;
 	}
 	
-	public ArrayList<Config> allValidNextTo(Config c)
-	{
-		ArrayList<Config> configs = new ArrayList<Config>();
+	public Sequence breadthFirstSearch(){
 		
-		if(c.getP() == 1)
+		Config x;
+		LinkedList<Config> f = new LinkedList<Config>();
+		ArrayList<Config> l = new ArrayList<Config>();
+		HashMap<String,Boolean> visited = new HashMap<String,Boolean>();
+
+		x = new Config(0,0,false);
+		visited.put(x.toKey(),true);
+		f.addFirst(x);
+		l.add(x);
+		
+		while (f.size() != 0)
 		{
-			configs.add(new Config(c.getNE(), c.getNA(), 0));
+			x = f.poll();
+			//System.out.println(x.toString());
+			for (Config y : x.generateNext(this))
+			{
+				if(visited.get(y.toKey()) == null){
+					visited.put(y.toKey(), true);
+					f.addFirst(y);
+					l.add(y); 
+				}else{
+					//System.out.println(y.toString());
+				}
+			}
 		}
-		else
-		{
-			for(int nA=c.getNA()+1; nA - c.getNA() <= k; nA++)
-				configs.add(new Config(c.getNE(), nA, 1));
-			for(int nA=c.getNA()+1, nE=c.getNE()+1; nA - c.getNA() <= k/2; nA++)
-				configs.add(new Config(nE, nA, 1));
-		}
-		return configs;
+		
+		return new Sequence(l);
 	}
 	
+	public Sequence traversee(){
+		
+		
+		LinkedList<Config> f = new LinkedList<Config>();
+		ArrayList<Config> l = new ArrayList<Config>();
+		HashMap<String,Integer> visited = new HashMap<String,Integer>();
+		
+		Config x = new Config(0,0,false);
+		Integer actualInt = new Integer(0);
+		Integer lastInt;
+		
+		visited.put(x.toKey(),actualInt);
+		f.addFirst(x);
+		l.add(x);
+		
+		while (f.size() != 0)
+		{
+			x = f.poll();
+			lastInt = visited.get(x.toKey()) + 1;
+			//System.out.println(x.toString());
+			for (Config y : x.generateNext(this))
+			{
+				actualInt = visited.get(y.toKey());
+				
+				if(actualInt == null){
+					visited.put(y.toKey(), lastInt);
+					f.addFirst(y);
+					l.add(y); 
+				}else{
+					//System.out.println(y.toString());
+				}
+			}
+		}
+		
+		Integer min;
+		x = new Config(this.getN(),this.getN(),true);
+		actualInt = visited.get(x.toKey());
+		ArrayList<Config> l2 = new ArrayList<Config>();
+		
+		if(actualInt == null){
+			//System.out.println("ERROR");
+			return null;
+		}
+		l2.add(x);
+		System.out.println("Try1");
+		lastInt = visited.get(x.toKey());
+		while(lastInt != 0)
+		{
+			min = lastInt;
+			for (Config y : x.generateNext(this))
+			{
+				actualInt = visited.get(y.toKey());
+				if(min > actualInt){
+					min = actualInt;
+					x = y;
+				}
+			}
+			l2.add(x);
+			lastInt = visited.get(x.toKey());
+		}
+		
+		return new Sequence(l2);
+	}
 	
-	//public Sequence Traversee(){}
-
+	public String toString(){
+		return "un graphe des config n="+this.n+" k="+this.k;
+	}
+	
 }

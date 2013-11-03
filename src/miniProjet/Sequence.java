@@ -9,6 +9,9 @@ public class Sequence {
 	public Sequence() {
 		configs = new ArrayList<Config>();
 	}
+	public Sequence(ArrayList<Config> c) {
+		configs = c;
+	}
 	
 	public int getSize(){
 		return configs.size();
@@ -17,6 +20,16 @@ public class Sequence {
 		return configs;
 	}
 	
+	public String toString()
+	{
+		String s= "";
+		int i = 1;
+		for(Config c : configs){
+			s += i + ": " + c.toString() + "\n";
+			i++;
+		}
+		return s;
+	}
 	
 	
 	

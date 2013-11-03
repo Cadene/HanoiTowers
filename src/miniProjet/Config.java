@@ -1,12 +1,14 @@
 package miniProjet;
 
+import java.util.ArrayList;
+
 public class Config {
 
 	int nE;
 	int nA;
-	int p;
+	boolean p;
 
-	public Config(int nE, int nA, int p)
+	public Config(int nE, int nA, boolean p)
 	{
 		this.nE = nE;
 		this.nA = nA;
@@ -19,7 +21,7 @@ public class Config {
 	public int getNA(){
 		return nA;
 	}
-	public int getP(){
+	public boolean getP(){
 		return p;
 	}
 	
@@ -30,24 +32,97 @@ public class Config {
 		return false;
 	}
 	
-	public boolean isNextTo(Config c, GraphConfig gc)
+	public boolean isNextTo(Config begin, GraphConfig gc)
 	{
-		if(p == c.getP())
+		if(p == begin.getP())
+			return false;
+		if(!this.isValid(gc))
+			return false;
+		if(!begin.isValid(gc))
 			return false;
 		
-		if(nE == c.getNE()
-				&& nA > c.getNA()
-				&& (nA - c.getNA() <= gc.getK()))
-			return true;
-		else if(nE - c.getNE() == nA - c.getNA()
-				&& nA - c.getNA() > 0
-				&& nA - c.getNA() <= gc.getK()/2)
-			return true;
+		if(nE == begin.getNE()){
+			if(nA > begin.getNA()
+				&& (nA - begin.getNA() <= gc.getK())){
+				return true;
+			}
+			if(nA < begin.getNA()
+				&& (begin.getNA() -nA  <= gc.getK())){
+				return true;
+			}
+		}
+		
+		if(nE != begin.getNE()){
+			if(Math.abs(nA - begin.getNA())
+				+ Math.abs(nE - begin.getNE()) <= gc.getK()){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public ArrayList<Config> generateNext(GraphConfig gc)
+	{	
+		int nE;
+		int nA;
+		Config neighbour;
+		ArrayList<Config> neighbours = new ArrayList<Config>();
+		
+		if(this.p)
+		{
+			
+			for(nE = this.nE;  nE >= this.nE-gc.getK() && nE >= 0; nE--)
+			{
+				for (nA = this.nA; nA >= this.nA-gc.getK() && nA >= 0; nA--)
+				{
+					if ( (Math.abs(this.nA-nA) + Math.abs(this.nE-nE) <= gc.getK())
+						&& !( (nA == this.nA) && (nE == this.nE)) )
+					{
+						neighbour = new Config(nE, nA, !this.getP());
+					
+						if(neighbour.isValid(gc))
+							neighbours.add(neighbour);
+					}
+				}
+			}
+		}
 		else
-			return false;
+		{	
+			for(nE = this.nE; nE <= this.nE+gc.getK() && nE <= gc.getN() ; nE++)
+			{
+				for (nA = this.nA; nA <= this.nA+gc.getK() && nA <= gc.getN(); nA++)
+				{
+					if ( (Math.abs(this.nA-nA) + Math.abs(this.nE-nE) <= gc.getK())
+						&& !( (nA == this.nA) && (nE == this.nE)) )
+					{
+						neighbour = new Config(nE, nA, !this.getP());
+					
+						if(neighbour.isValid(gc))
+							neighbours.add(neighbour);
+					}
+				}
+			}
+		}
+
+		return neighbours;
 	}
 	
 	public String toString(){
-		return "("+nE+", "+nA+", "+p+")";
+		String s = "("+nE+", "+nA+", ";
+		if(p)
+			s += "1)";
+		else
+			s += "0)";
+		return s;
+	}
+	
+	public String toKey(){
+		String s = nE +";"+ nA + ";";
+		if(p)
+			s += "1";
+		else
+			s += "0";
+		return s;
 	}
 }

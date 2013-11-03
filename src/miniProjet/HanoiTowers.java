@@ -4,15 +4,35 @@ public class HanoiTowers {
 
 	public static void main(String[] args)
 	{
-		String string = "= = Hanoi Towers = =\n";
+		String string = "= = Hanoi Towers = =\n\n";
+		
+		Sequence sequence;
+		Config departure = new Config(0,1,false);
+		Config arrival = new Config(3,0,true);
 		
 		GraphConfig gc = new GraphConfig(3,2);
+		string += "Création d'"+ gc.toString() + ".\n\n";
 		
 		string += "Toutes configurations valides :\n";
-		string += Function.ArrayListToString( gc.allValidConfigs() );
+		sequence = new Sequence( gc.generateValidConfigs() );
+		string += sequence.toString();
+		string += "\n";
 		
-		string += "Tous voisins valides :\n";
-		string += Function.ArrayListToString( gc.allValidNextTo(new Config(0,1,0)) );
+		string += arrival.toString() + " est un voisin de (est après) " + departure.toString() + " ? ";
+		string += arrival.isNextTo(departure, gc);
+		string += "\n\n";
+		
+		string += "Tout voisins valides de " + departure.toString() + " dans " + gc.toString() + " :\n";
+		sequence = new Sequence(departure.generateNext(gc));
+		string += sequence.toString();
+		string += "\n";
+		
+		string += "Traversee() :\n";
+		string += gc.breadthFirstSearch().toString();
+		string += "\n";
+		
+		string += "Traversee() :\n";
+		string += gc.traversee().toString();
 		
 		System.out.println(string);
 	}
