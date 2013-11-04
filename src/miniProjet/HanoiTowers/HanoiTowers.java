@@ -5,7 +5,7 @@ import miniProjet.HanoiTowers.GraphConfig;
 
 public class HanoiTowers {
 
-	public static void main(String[] args) {
+	public static void mainExo3() {
 		
 		String string = "= = HanoiTowers = =\n\n";
 		

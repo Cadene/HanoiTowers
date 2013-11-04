@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 public class Traversee {
 
-	public static void main(String[] args)
+	public static void mainExo2()
 	{
 		String string = "= = Traversee = =\n\n";
 		
@@ -14,14 +14,14 @@ public class Traversee {
 		Config arrival = new Config(3,0,true);
 	
 		GraphConfig gc = new GraphConfig(3,2);
-		string += "Création d'"+ gc.toString() + ".\n\n";
+		string += "Creation d'"+ gc.toString() + ".\n\n";
 		
 		string += "Toutes configurations valides :\n";
 		sequence = new Sequence( gc.generateValidConfigs() );
 		string += sequence.toString();
 		string += "\n";
 		
-		string += arrival.toString() + " est un voisin de (est après) " + departure.toString() + " ? ";
+		string += arrival.toString() + " est un voisin de (est apres) " + departure.toString() + " ? ";
 		string += arrival.isNextTo(departure, gc);
 		string += "\n\n";
 		
@@ -64,7 +64,7 @@ public class Traversee {
 			tab[n] = endTime - startTime;
 		}
 		
-		String fileName = "./data/data.txt";
+		String fileName = "./data/traversee"+maxN+".txt";
 	    try{
 	      PrintWriter out  = new PrintWriter(new FileWriter(fileName));
 	      for (int n = 3; n < tab.length; n++)
