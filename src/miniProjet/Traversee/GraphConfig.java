@@ -1,9 +1,8 @@
-package miniProjet;
+package miniProjet.Traversee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class GraphConfig {
 	
@@ -115,7 +114,6 @@ public class GraphConfig {
 			}
 		}
 		
-		Integer min;
 		x = new Config(this.getN(),this.getN(),true);
 		actualInt = visited.get(x.toKey());
 		ArrayList<Config> l2 = new ArrayList<Config>();

@@ -1,4 +1,4 @@
-package miniProjet;
+package miniProjet.Traversee;
 
 import java.util.ArrayList;
 

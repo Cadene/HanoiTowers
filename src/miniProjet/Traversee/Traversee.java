@@ -1,9 +1,9 @@
-package miniProjet;
+package miniProjet.Traversee;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
-public class HanoiTowers {
+public class Traversee {
 
 	public static void main(String[] args)
 	{
@@ -14,14 +14,14 @@ public class HanoiTowers {
 		Config arrival = new Config(3,0,true);
 	
 		GraphConfig gc = new GraphConfig(3,2);
-		string += "Création d'"+ gc.toString() + ".\n\n";
+		string += "Cr??ation d'"+ gc.toString() + ".\n\n";
 		
 		string += "Toutes configurations valides :\n";
 		sequence = new Sequence( gc.generateValidConfigs() );
 		string += sequence.toString();
 		string += "\n";
 		
-		string += arrival.toString() + " est un voisin de (est après) " + departure.toString() + " ? ";
+		string += arrival.toString() + " est un voisin de (est apr??s) " + departure.toString() + " ? ";
 		string += arrival.isNextTo(departure, gc);
 		string += "\n\n";
 		
@@ -39,7 +39,7 @@ public class HanoiTowers {
 		string += "\n";
 		
 		string += "Courbe :\n";
-		HanoiTowers.generateCurveCPU(1500);
+		Traversee.generateCurveCPU(1500);
 		System.out.println(string);
 	}
 	
