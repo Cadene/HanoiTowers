@@ -7,21 +7,21 @@ public class Traversee {
 
 	public static void main(String[] args)
 	{
-		String string = "= = Hanoi Towers = =\n\n";
+		String string = "= = Traversee = =\n\n";
 		
 		Sequence sequence;
 		Config departure = new Config(0,1,false);
 		Config arrival = new Config(3,0,true);
 	
 		GraphConfig gc = new GraphConfig(3,2);
-		string += "Cr??ation d'"+ gc.toString() + ".\n\n";
+		string += "Création d'"+ gc.toString() + ".\n\n";
 		
 		string += "Toutes configurations valides :\n";
 		sequence = new Sequence( gc.generateValidConfigs() );
 		string += sequence.toString();
 		string += "\n";
 		
-		string += arrival.toString() + " est un voisin de (est apr??s) " + departure.toString() + " ? ";
+		string += arrival.toString() + " est un voisin de (est après) " + departure.toString() + " ? ";
 		string += arrival.isNextTo(departure, gc);
 		string += "\n\n";
 		
@@ -38,8 +38,13 @@ public class Traversee {
 		string += gc.traversee().toString();
 		string += "\n";
 		
-		string += "Courbe :\n";
+		string += "Courbe :\n...";
+		
+		System.out.println(string);
+		
 		Traversee.generateCurveCPU(1500);
+		
+		string = "new data.txt in 'miniProjet/data'";
 		System.out.println(string);
 	}
 	
