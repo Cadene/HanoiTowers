@@ -16,129 +16,166 @@ public class GraphConfig {
 	public int getN(){
 		return n;
 	}
-	/*
-	public ArrayList<Config> generateValidConfigs()
-	{
-		ArrayList<Config> configs = new ArrayList<Config>();
-		Config earth;
-		Config island;
-		
-		for(int nE=0; nE<=n; nE++){
-			for(int nA=0; nA<=n; nA++){
-				
-				earth = new Config(nE,nA,false);
-				island = new Config(nE,nA,true);
-				
-				if(nE==0 && nA==0)
-					configs.add(earth);
-				else
-				if(nE==n && nA==n)
-					configs.add(island);
-				else{
-					if(island.isValid(this))
-						configs.add(island);
-					if(earth.isValid(this))
-						configs.add(earth);
-				}
-			}
-		}	
-		return configs;
-	}*/
-	/*
-	public Sequence breadthFirstSearch(){
-		
-		Config x;
-		LinkedList<Config> f = new LinkedList<Config>();
-		ArrayList<Config> l = new ArrayList<Config>();
-		HashMap<String,Boolean> visited = new HashMap<String,Boolean>();
+	
 
-		x = new Config(0,0,false);
-		visited.put(x.toKey(),true);
-		f.addFirst(x);
-		l.add(x);
+	
+	public ArrayList<Config> generateNext(Config c)
+	{	
+		ArrayList<Config> neighbours = new ArrayList<Config>();
+		int r1, r2;
+		Config x = c.clone();
 		
-		while (f.size() != 0)
+		for(int i=0; i<3; i++)
 		{
-			x = f.poll();
 			//System.out.println(x.toString());
-			for (Config y : x.generateNext(this))
+			if(!x.stacks.get(i).isEmpty())
 			{
-				if(visited.get(y.toKey()) == null){
-					visited.put(y.toKey(), true);
-					f.addFirst(y);
-					l.add(y); 
-				}else{
-					//System.out.println(y.toString());
-				}
+				for(int j=1; j<=2; j++)
+				{
+					r1 = x.stacks.get(i).pop();
+					
+					if(!x.stacks.get((i+j)%3).isEmpty())
+					{
+						r2 = x.stacks.get((i+j)%3).peek();
+					
+						if(r1 < r2)
+						{
+							x.stacks.get((i+j)%3).push(r1);
+							neighbours.add(x);
+						}
+					}
+					else
+					{
+						x.stacks.get((i+j)%3).push(r1);
+						neighbours.add(x);
+					}
+					
+					//System.out.println("- new -\n" + x.toString());
+					x = c.clone();
+				}	
+
 			}
 		}
 		
-		return new Sequence(l);
+		return neighbours;
 	}
 	
-	public ArrayList<Config> Hanoi1()
+	public HashMap<String,Integer> breadthFirstSearch(Config first, Config last)
 	{
 		LinkedList<Config> f = new LinkedList<Config>();
-		ArrayList<Config> l = new ArrayList<Config>();
 		HashMap<String,Integer> visited = new HashMap<String,Integer>();
 		
-		Config x = new Config(this.getN(),0,0);
+		Config x = first.clone();
 		Integer actualInt = new Integer(0);
 		Integer lastInt;
 		
-		visited.put(x.toKey(),actualInt);
-		f.addFirst(x);
-		l.add(x);
+		visited.put(x.toKey(n),actualInt);
+		f.add(x); // x en dernier
 		
 		while (f.size() != 0)
 		{
-			x = f.poll();
-			lastInt = visited.get(x.toKey()) + 1;
-			//System.out.println(x.toString());
-			for (Config y : x.generateNext(this))
+			x = f.poll(); // premier element
+			lastInt = visited.get(x.toKey(n)) + 1; // distance supposees des voisins de x
+			//System.out.println(x.toKey());
+			
+			for (Config y : this.generateNext(x)) // pour chaque voisins
 			{
-				actualInt = visited.get(y.toKey());
+				actualInt = visited.get(y.toKey(n)); // distance actuelle
 				
-				if(actualInt == null){
-					visited.put(y.toKey(), lastInt);
-					f.addFirst(y);
-					l.add(y); 
-				}else{
+				if(actualInt == null) // si pas encore visité
+				{ 
+					visited.put(y.toKey(n), lastInt); // distance de y = distance de x + 1
+					
+					if(y.equal(last))
+					{
+						return visited;
+					}
+					f.add(y); // y en premier
+				}
+				else
+				{
 					//System.out.println(y.toString());
 				}
 			}
 		}
 		
-		x = new Config(this.getN(),this.getN(),true);
-		actualInt = visited.get(x.toKey());
-		ArrayList<Config> l2 = new ArrayList<Config>();
-		
-		if(actualInt == null){
-			return new Sequence(null);
+		return null;
+	}
+	
+	public void hanoiProc(Config first, LinkedList<Config> path, int n, int fromStack, int tempStack, int toStack)
+	{
+		if(n > 0)
+		{
+			this.hanoiProc(first, path, n-1, fromStack, toStack, tempStack);
+
+			first.move(fromStack, toStack);
+			
+			//System.out.println( first.toString() );
+			path.add(first.clone());
+			
+			this.hanoiProc(first, path, n-1, tempStack, fromStack, toStack);
+
 		}
-		l2.add(x);
-		//System.out.println("Try1");
-		lastInt = visited.get(x.toKey());
+	}
+	
+	
+	public LinkedList<Config> hanoi(int fromStack, int tempStack, int toStack)
+	{
+		Config first = ConfigFactory.makeFirst(n);
+		LinkedList<Config> path = new LinkedList<Config>();
+		
+		//System.out.println( first.toString() );
+		path.add(first.clone());
+		
+		this.hanoiProc(first, path, n, fromStack, tempStack, toStack);
+		
+		return path;
+		
+	}
+	
+	public LinkedList<Config> hanoi1(Config first)
+	{
+		return shortestWay(first, ConfigFactory.makeLast(n));
+	}
+	
+	public LinkedList<Config> shortestWay(Config first, Config last)
+	{
+		HashMap<String,Integer> visited = this.breadthFirstSearch(first, last);
+		
+		if(visited == null)
+		{
+			return new LinkedList<Config>();
+		}
+		
+		Config x;
+		Integer actualInt;
+		Integer lastInt;
+		LinkedList<Config> l = new LinkedList<Config>();
+		
+		x = ConfigFactory.makeLast(n);
+		l.add(x);
+		lastInt = visited.get(x.toKey(n));
+		
 		while(lastInt != 0)
 		{
-			for (Config y : x.generateNext(this))
+			for (Config y : this.generateNext(x))
 			{
-				actualInt = visited.get(y.toKey());
-				//System.out.println(actualInt);
-				if(lastInt == actualInt+1){
+				actualInt = visited.get(y.toKey(n));
+				
+				if(actualInt != null && lastInt == actualInt+1){
 					x = y;
 					break;
 				}
 			}
-			l2.add(x);
-			lastInt = visited.get(x.toKey());
+			l.addFirst(x);
+			lastInt = visited.get(x.toKey(n));
 		}
 		
-		return new Sequence(l2);
+		return l;
 	}
 	
 	public String toString(){
-		return "un graphe des config n="+this.n+" k="+this.k;
+		return "";
 	}
-	*/
+	
 }

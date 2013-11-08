@@ -5,27 +5,53 @@ import java.util.Stack;
 
 public class Config {
 
-	ArrayList<Stack<Integer>> piles;
+	ArrayList<Stack<Integer>> stacks;
 
-	public Config(int nbDisques)
-	{
-		piles = new ArrayList<Stack<Integer>>();
-		
+	/* Constructeurs */
+	
+	private void init(){
+		stacks = new ArrayList<Stack<Integer>>();
 		for(int p=0; p<3; p++){
-			piles.add(new Stack<Integer>());
+			stacks.add(new Stack<Integer>());
 		}
+	}
+	
+	public Config(){
+		init();
+	}
+	
+	public Config(ArrayList<Integer> tab)
+	{
+		this.init();
 		
-		for(int n= nbDisques; n >= 1; n--){
-			piles.get(0).push(n);
+		for(int i=tab.size()-1; i>=0; i--)
+		{
+			stacks.get(tab.get(i)-1).push(i+1);
 		}
+	}
+	
+	public int getNbRings(){
+		int nbR = 0;
+		for(Stack<Integer> stack : stacks){
+			for(Integer integer : stack){
+				nbR++;
+			}
+		}
+		return nbR;
+	}
+	
+	/* Setters */
+	
+	public void setStacks(ArrayList<Stack<Integer>> stacks){
+		this.stacks = stacks;
 	}
 	
 	public String toString(){
 		String s = "";
 		int nbP = 1;
-		for(Stack<Integer> pile : piles){
+		for(Stack<Integer> stack : stacks){
 			s += "p["+nbP+"]: ";
-			for(Integer i : pile){
+			for(Integer i : stack){
 				s += i + " ";
 			}
 			s += "\n";
@@ -33,117 +59,72 @@ public class Config {
 		}
 		return s;
 	}
-	/*
-	public Config(ArrayList<Stack<Integer>> pile){
-		this.pile = pile;
-	}
 	
-	public Config(ArrayList<Integer> nbDisque){
-		this.pile = new ArrayList<Stack<Integer>>();
-		for(int p=0; p<3; p++){
-			for(int i=1)
-			pile.get(p).add(arg0)
-		}
-	}
-	
-	public boolean isValid(GraphConfig gc)
-	{
-		if(nA == nE || nE == gc.getN() || nE == 0)
-			return true;
-		return false;
-	}
-	
-	public boolean isNextTo(Config begin, GraphConfig gc)
-	{
-		if(p == begin.getP())
-			return false;
-		if(!this.isValid(gc))
-			return false;
-		if(!begin.isValid(gc))
-			return false;
+	public String toKey(int nbRings){
 		
-		if(nE == begin.getNE()){
-			if(nA > begin.getNA()
-				&& (nA - begin.getNA() <= gc.getK())){
-				return true;
-			}
-			if(nA < begin.getNA()
-				&& (begin.getNA() -nA  <= gc.getK())){
-				return true;
-			}
-		}
+		String s = "";
+		int[] tab = new int[nbRings];
 		
-		if(nE != begin.getNE()){
-			if(Math.abs(nA - begin.getNA())
-				+ Math.abs(nE - begin.getNE()) <= gc.getK()){
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public ArrayList<Config> generateNext(GraphConfig gc)
-	{	
-		int nE;
-		int nA;
-		Config neighbour;
-		ArrayList<Config> neighbours = new ArrayList<Config>();
-		
-		if(this.p)
+		int nbStack = 1;
+		for(Stack<Integer> stack : stacks)
 		{
-			
-			for(nE = this.nE;  nE >= this.nE-gc.getK() && nE >= 0; nE--)
+			for(Integer integer : stack)
 			{
-				for (nA = this.nA; nA >= this.nA-gc.getK() && nA >= 0; nA--)
-				{
-					if ( (Math.abs(this.nA-nA) + Math.abs(this.nE-nE) <= gc.getK())
-						&& !( (nA == this.nA) && (nE == this.nE)) )
-					{
-						neighbour = new Config(nE, nA, !this.getP());
-					
-						if(neighbour.isValid(gc))
-							neighbours.add(neighbour);
-					}
-				}
+				tab[integer-1] = nbStack;
+			}
+			nbStack++;
+		}
+		
+		boolean isFirst = true;
+		for(int i=0; i<nbRings; i++)
+		{
+			if(isFirst){
+				s += tab[i];
+				isFirst = false;
+			}else{
+				s += ";" + tab[i];
 			}
 		}
-		else
-		{	
-			for(nE = this.nE; nE <= this.nE+gc.getK() && nE <= gc.getN() ; nE++)
-			{
-				for (nA = this.nA; nA <= this.nA+gc.getK() && nA <= gc.getN(); nA++)
-				{
-					if ( (Math.abs(this.nA-nA) + Math.abs(this.nE-nE) <= gc.getK())
-						&& !( (nA == this.nA) && (nE == this.nE)) )
-					{
-						neighbour = new Config(nE, nA, !this.getP());
-					
-						if(neighbour.isValid(gc))
-							neighbours.add(neighbour);
-					}
-				}
-			}
-		}
+		
+		return s;
+	}
 
-		return neighbours;
+	public Config clone()
+	{
+		Config conf = new Config();
+		ArrayList<Stack<Integer>> newStacks = new ArrayList<Stack<Integer>>();
+		
+		int i = 0;
+		for(Stack<Integer> stack : this.stacks)
+		{
+			newStacks.add(new Stack<Integer>());
+			
+			for(Integer integer : stack)
+			{
+				newStacks.get(i).push(integer);
+			}
+			i++;
+		}
+		
+		conf.setStacks(newStacks);
+		return conf;
 	}
 	
-	public String toString(){
-		String s = "("+nE+", "+nA+", ";
-		if(p)
-			s += "1)";
-		else
-			s += "0)";
-		return s;
+	public boolean equal(Config c)
+	{
+		for(int i=0; i<this.stacks.size(); i++)
+		{
+			if(this.stacks.get(i).size() != c.stacks.get(i).size())
+				return false;
+		}
+		return true;
 	}
 	
-	public String toKey(){
-		String s = nE +";"+ nA + ";";
-		if(p)
-			s += "1";
-		else
-			s += "0";
-		return s;
-	}*/
+	public void move(int fromStack, int toStack)
+	{
+		//System.out.println(fromStack + " " + toStack);
+		int ring = this.stacks.get(fromStack).pop();
+		this.stacks.get(toStack).push(ring);
+	}
+	
 }
