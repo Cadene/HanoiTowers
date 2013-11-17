@@ -1,8 +1,10 @@
 package miniProjet.HanoiTowers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class GraphConfig {
 	
@@ -102,42 +104,7 @@ public class GraphConfig {
 		return null;
 	}
 	
-	public void hanoiProc(Config first, LinkedList<Config> path, int n, int fromStack, int tempStack, int toStack)
-	{
-		if(n > 0)
-		{
-			this.hanoiProc(first, path, n-1, fromStack, toStack, tempStack);
 
-			first.move(fromStack, toStack);
-			
-			//System.out.println( first.toString() );
-			path.add(first.clone());
-			
-			this.hanoiProc(first, path, n-1, tempStack, fromStack, toStack);
-
-		}
-	}
-	
-	
-	public LinkedList<Config> hanoi(int fromStack, int tempStack, int toStack)
-	{
-		Config first = ConfigFactory.makeFirst(n);
-		LinkedList<Config> path = new LinkedList<Config>();
-		
-		//System.out.println( first.toString() );
-		path.add(first.clone());
-		
-		this.hanoiProc(first, path, n, fromStack, tempStack, toStack);
-		
-		return path;
-		
-	}
-	
-	public LinkedList<Config> hanoi1(Config first)
-	{
-		return shortestWay(first, ConfigFactory.makeLast(n));
-	}
-	
 	public LinkedList<Config> shortestWay(Config first, Config last)
 	{
 		HashMap<String,Integer> visited = this.breadthFirstSearch(first, last);
@@ -172,6 +139,164 @@ public class GraphConfig {
 		}
 		
 		return l;
+	}
+
+	public LinkedList<Config> hanoi1(Config first)
+	{
+		return shortestWay(first, ConfigFactory.makeLast(n));
+	}
+	
+	
+	public void hanoiProc(Config first, LinkedList<Config> path, int n, int fromStack, int tempStack, int toStack)
+	{
+		if(n > 0)
+		{
+			this.hanoiProc(first, path, n-1, fromStack, toStack, 3-fromStack-toStack);
+
+			first.move(fromStack, toStack);
+			
+			//System.out.println( first.toString() );
+			path.add(first.clone());
+			
+			this.hanoiProc(first, path, n-1, 3-fromStack-toStack, fromStack, toStack);
+
+		}
+	}
+	public LinkedList<Config> hanoi(int n, int fromStack, int toStack)
+	{
+		Config first = ConfigFactory.makeFirst(n);
+		LinkedList<Config> path = new LinkedList<Config>();
+		
+		//System.out.println( first.toString() );
+		path.add(first.clone());
+		
+		this.hanoiProc(first, path, n, fromStack, 3-fromStack-toStack, toStack);
+		
+		return path;
+	}
+	
+	private ArrayList<Integer> makePi(Config c)
+	{
+		ArrayList<Integer> Pi = new ArrayList<Integer>();
+		
+		for(int i=0; i<=c.getNbRings(); i++){ Pi.add(0); }
+		
+		int nbS=0;
+		for(Stack<Integer> stack : c.stacks)
+		{
+			for(Integer d : stack)
+			{
+				Pi.set(d, nbS);
+			}
+			nbS++;
+		}
+		
+		return Pi;
+	}
+	
+	private ArrayList<Integer> makePf(ArrayList<Integer> Pi)
+	{
+		ArrayList<Integer> Pf = new ArrayList<Integer>();
+		int n = Pi.size()-1;
+		int toStack = 2;
+
+		for(int i=0; i <= n; i++){ Pf.add(0); }
+		
+		Pf.set(n, toStack);
+		for(int d=n-1; d>=1; d--)
+		{
+			if(Pi.get(d+1) == Pf.get(d+1))
+				Pf.set(d, Pf.get(d+1));
+			else
+				Pf.set(d, 3 - Pi.get(d+1) - Pf.get(d+1) ); 
+		}
+		
+		return Pf;
+	}
+	
+	private int getTemp(int from, int to)
+	{
+		return 3 - from - to;
+	}
+	
+	public LinkedList<Config> hanoi2(Config first)
+	{
+		LinkedList<Config> path = new LinkedList<Config>();
+		ArrayList<Integer> Pi = makePi(first);
+		ArrayList<Integer> Pf = makePf(Pi);
+		
+		int n = first.getNbRings();
+		int from, temp, to;
+		
+		path.add(first.clone());
+		
+		for(int d=1; d<=n; d++)
+		{
+			if(Pi.get(d) != Pf.get(d))
+			{
+				first.move(Pi.get(d), Pf.get(d));
+				path.add(first.clone());
+				
+				from = 3 - Pi.get(d) - Pf.get(d);
+				to = Pf.get(d);
+				temp = getTemp(from, to);
+				this.hanoiProc(first, path, d-1, from, temp, to);
+			}
+		}
+		
+		return path;
+	}
+	
+	public int hanoi3(Config first)
+	{
+		int nbMove = 0;
+		int n = first.getNbRings();
+		
+		ArrayList<Integer> Pi = makePi(first);
+		ArrayList<Integer> Pf = makePf(Pi);
+		
+		for(int d=1; d<=n; d++)
+		{
+			if(Pi.get(d) != Pf.get(d))
+			{
+				//first.move(Pi.get(d), Pf.get(d));
+				nbMove++;
+				
+				nbMove += getUR(d-1);
+			}
+		}
+		
+		return nbMove;
+	}
+	
+	public int getU(int n){
+		if(n>0)
+			return (int) Math.pow(2, n-1) + n - 1;
+		return 0;
+	}
+	
+	public int getUR(int n){
+		int temp;
+		if(n>1){
+			temp = getUR(n-1);
+			return temp*2+1;
+		}
+		return 1;
+	}
+	
+	public void hanoiProc3(Integer nbMove, int n, int fromStack, int tempStack, int toStack)
+	{
+		if(n > 0)
+		{
+			this.hanoiProc3(nbMove, n-1, fromStack, toStack, 3-fromStack-toStack);
+
+			//first.move(fromStack, toStack);
+			nbMove = Integer.valueOf(nbMove.intValue() + 1);
+			System.out.println(nbMove);
+			
+			this.hanoiProc3(nbMove, n-1, 3-fromStack-toStack, fromStack, toStack);
+
+		}
 	}
 	
 	public String toString(){

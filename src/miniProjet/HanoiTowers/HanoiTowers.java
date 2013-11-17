@@ -19,8 +19,10 @@ public class HanoiTowers {
 		string += "Creation de la configuration :\n\n";
 		Config x;
 		ArrayList<Integer> tab = new ArrayList<Integer>();
+		tab.add(1);
 		tab.add(3);
-		tab.add(3);
+		tab.add(2);
+		tab.add(1);
 		x = new Config(tab);
 		string += x.toString();
 		string += "\n";
@@ -30,15 +32,12 @@ public class HanoiTowers {
 		GraphConfig gc = new GraphConfig(nbDisques);
 		string += "Création d'un graphe de " + nbDisques + " disques\n\n";
 		
+		Config randC = ConfigFactory.makeRandom(nbDisques);
 		
 		string += "Hanoi1 :\n";
 		string += HanoiTowers.toKey( gc.hanoi1( ConfigFactory.makeFirst(nbDisques) ));
 		string += "\n";
 		
-		
-		string += "Hanoi1 Random :\n";
-		string += HanoiTowers.toKey( gc.hanoi1( ConfigFactory.makeRandom(nbDisques) ));
-		string += "\n";
 		
 		//string += "Courbe :\n...\n";
 		//HanoiTowers.generateCurveCPU(10,1);
@@ -47,9 +46,21 @@ public class HanoiTowers {
 		
 		
 		string += "Hanoi Recursif :\n";
-		string += HanoiTowers.toKey( gc.hanoi(0, 1, 2) );
+		string += HanoiTowers.toKey( gc.hanoi(gc.n, 0, 2) );
+		string += "\n";
+		
+
+		string += "Hanoi1 Random :\n";
+		string += HanoiTowers.toKey( gc.hanoi1( randC.clone() ));
+		string += "\n";
+		
+		string += "Hanoi2 :\n";
+		string += HanoiTowers.toKey( gc.hanoi2( randC.clone() ) );
 		string += "\n";
 
+		string += "Hanoi3 :\n";
+		string += gc.hanoi3( randC.clone() );
+		string += "\n";
 		
 		System.out.println(string);
 

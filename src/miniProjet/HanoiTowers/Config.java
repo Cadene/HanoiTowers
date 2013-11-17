@@ -33,9 +33,7 @@ public class Config {
 	public int getNbRings(){
 		int nbR = 0;
 		for(Stack<Integer> stack : stacks){
-			for(Integer integer : stack){
-				nbR++;
-			}
+			nbR += stack.size();
 		}
 		return nbR;
 	}
@@ -94,16 +92,10 @@ public class Config {
 		Config conf = new Config();
 		ArrayList<Stack<Integer>> newStacks = new ArrayList<Stack<Integer>>();
 		
-		int i = 0;
+		//int i = 0;
 		for(Stack<Integer> stack : this.stacks)
 		{
-			newStacks.add(new Stack<Integer>());
-			
-			for(Integer integer : stack)
-			{
-				newStacks.get(i).push(integer);
-			}
-			i++;
+			newStacks.add((Stack<Integer>) stack.clone());
 		}
 		
 		conf.setStacks(newStacks);
