@@ -1,5 +1,7 @@
 package miniProjet.Traversee;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,12 +11,18 @@ public class GraphConfig {
 	int n;
 	int k;
 	
+	
+	/* Constructeurs */
+	
 	public GraphConfig(int n, int k)
 	{
 		this.n = n;
 		this.k = k;
 	}
 
+	
+	/* Getters */
+	
 	public int getN(){
 		return n;
 	}
@@ -22,6 +30,13 @@ public class GraphConfig {
 		return k;
 	}
 
+
+	/* Others */
+	
+	public String toString(){
+		return "un graphe des config n="+this.n+" k="+this.k;
+	}
+	
 	public boolean isValid(Config c)
 	{
 		if(c.nA == c.nE || c.nE == n || c.nE == 0)
@@ -211,8 +226,37 @@ public class GraphConfig {
 		return l;
 	}
 	
-	public String toString(){
-		return "un graphe des config n="+this.n+" k="+this.k;
+	public static void generateCurveCPU(int maxN, int every)
+	{
+		long startTime, endTime;
+		GraphConfig gc;
+		
+	    try{
+	    	String fileName = "./data/traversee/"+maxN+":"+every+".txt";
+			PrintWriter out  = new PrintWriter(new FileWriter(fileName));
+	    	
+			int i=0;
+			for(int n=3; n < maxN+1; n=n+every)
+			{
+				gc = new GraphConfig(n,4);
+	
+				startTime = System.nanoTime();
+				gc.traversee();
+				endTime = System.nanoTime();
+				
+				out.println(n + ";" + (endTime - startTime));
+				if(n>i){
+					System.out.println(n);
+					i+=1000;
+				}
+			}
+		
+			out.close();
+	    }
+	    catch(Exception e){
+	      e.printStackTrace();
+	    }
 	}
+	
 	
 }

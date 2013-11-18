@@ -1,8 +1,5 @@
 package miniProjet.Traversee;
 
-import java.util.ArrayList;
-
-
 public class Config {
 
 	int nE;
@@ -38,8 +35,8 @@ public class Config {
 		return p;
 	}
 	
-	/* Other */
 	
+	/* Others */
 	
 	public String toString(){
 		String s = "("+nE+", "+nA+", ";

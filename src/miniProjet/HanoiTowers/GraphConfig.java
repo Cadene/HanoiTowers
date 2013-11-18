@@ -10,6 +10,8 @@ public class GraphConfig {
 	
 	int n;
 	
+	
+	
 	public GraphConfig(int n)
 	{
 		this.n = n;
@@ -147,18 +149,18 @@ public class GraphConfig {
 	}
 	
 	
-	public void hanoiProc(Config first, LinkedList<Config> path, int n, int fromStack, int tempStack, int toStack)
+	public void hanoiRec(Config first, LinkedList<Config> path, int n, int fromStack, int tempStack, int toStack)
 	{
 		if(n > 0)
 		{
-			this.hanoiProc(first, path, n-1, fromStack, toStack, 3-fromStack-toStack);
+			this.hanoiRec(first, path, n-1, fromStack, toStack, 3-fromStack-toStack);
 
 			first.move(fromStack, toStack);
 			
 			//System.out.println( first.toString() );
 			path.add(first.clone());
 			
-			this.hanoiProc(first, path, n-1, 3-fromStack-toStack, fromStack, toStack);
+			this.hanoiRec(first, path, n-1, 3-fromStack-toStack, fromStack, toStack);
 
 		}
 	}
@@ -170,7 +172,7 @@ public class GraphConfig {
 		//System.out.println( first.toString() );
 		path.add(first.clone());
 		
-		this.hanoiProc(first, path, n, fromStack, 3-fromStack-toStack, toStack);
+		this.hanoiRec(first, path, n, fromStack, 3-fromStack-toStack, toStack);
 		
 		return path;
 	}
@@ -240,7 +242,7 @@ public class GraphConfig {
 				from = 3 - Pi.get(d) - Pf.get(d);
 				to = Pf.get(d);
 				temp = getTemp(from, to);
-				this.hanoiProc(first, path, d-1, from, temp, to);
+				this.hanoiRec(first, path, d-1, from, temp, to);
 			}
 		}
 		
@@ -282,21 +284,6 @@ public class GraphConfig {
 			return temp*2+1;
 		}
 		return 1;
-	}
-	
-	public void hanoiProc3(Integer nbMove, int n, int fromStack, int tempStack, int toStack)
-	{
-		if(n > 0)
-		{
-			this.hanoiProc3(nbMove, n-1, fromStack, toStack, 3-fromStack-toStack);
-
-			//first.move(fromStack, toStack);
-			nbMove = Integer.valueOf(nbMove.intValue() + 1);
-			System.out.println(nbMove);
-			
-			this.hanoiProc3(nbMove, n-1, 3-fromStack-toStack, fromStack, toStack);
-
-		}
 	}
 	
 	public String toString(){

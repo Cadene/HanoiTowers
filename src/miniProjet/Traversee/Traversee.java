@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class Traversee {
 
-	public static void mainExo2()
+	public static void main()
 	{
 		String string = "= = Traversee = =\n\n";
 		

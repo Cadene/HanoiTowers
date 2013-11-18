@@ -11,39 +11,22 @@ import miniProjet.HanoiTowers.GraphConfig;
 
 public class HanoiTowers {
 
-	public static void mainExo3_1() {
+	public static void main1() {
 		
-		String string = "= = HanoiTowers = =\n\n";
+		String string = "= = Hanoi1 = =\n\n";
 		
-		
-		string += "Creation de la configuration :\n\n";
-		Config x;
-		ArrayList<Integer> tab = new ArrayList<Integer>();
-		tab.add(1);
-		tab.add(3);
-		tab.add(2);
-		tab.add(1);
-		x = new Config(tab);
-		string += x.toString();
-		string += "\n";
-		
+		string += "Courbe :\n...\n";
+		System.out.println(string);
+		HanoiTowers.generateCurveCPU(10,1);
+		string = "new data in 'miniProjet/data/hanoi1'";
 
-		int nbDisques = 3;
-		GraphConfig gc = new GraphConfig(nbDisques);
-		string += "Création d'un graphe de " + nbDisques + " disques\n\n";
+		System.out.println(string);
 		
-		Config randC = ConfigFactory.makeRandom(nbDisques);
-		
-		string += "Hanoi1 :\n";
-		string += HanoiTowers.toKey( gc.hanoi1( ConfigFactory.makeFirst(nbDisques) ));
-		string += "\n";
-		
-		
-		//string += "Courbe :\n...\n";
-		//HanoiTowers.generateCurveCPU(10,1);
-		//System.out.println(string);
-		//string = "new data in 'miniProjet/data/hanoi1'";
-		
+	}
+	
+	public static void main2() {
+	
+		String string = "= = Hanoi2 = =\n\n";
 		
 		string += "Hanoi Recursif :\n";
 		string += HanoiTowers.toKey( gc.hanoi(gc.n, 0, 2) );
@@ -62,13 +45,12 @@ public class HanoiTowers {
 		string += gc.hanoi3( randC.clone() );
 		string += "\n";
 		
-		System.out.println(string);
 
 	}
 	
 	
 	
-	public static String toString(ArrayList<Config> configs){
+	private static String toString(ArrayList<Config> configs){
 		String s = "";
 		for(Config conf : configs){
 			s += conf.toString() + "\n";
@@ -76,7 +58,7 @@ public class HanoiTowers {
 		return s;
 	}
 	
-	public static String toKey(LinkedList<Config> configs){
+	private static String toKey(LinkedList<Config> configs){
 		String s = "";
 		for(Config c : configs){
 			s += "(" + c.toKey(c.getNbRings()) + ")\n";
@@ -84,7 +66,7 @@ public class HanoiTowers {
 		return s;
 	}
 	
-	public static String toKey(HashMap<String,Integer> configs){
+	private static String toKey(HashMap<String,Integer> configs){
 		String s = "";
 		for(String key : configs.keySet()){
 			s += "(" + key + ") : " + configs.get(key) + "\n";
@@ -92,7 +74,7 @@ public class HanoiTowers {
 		return s;
 	}
 	
-	public static void generateCurveCPU(int maxN, int every)
+	private static void generateCurveCPU(int maxN, int every)
 	{
 		long startTime, endTime;
 		GraphConfig gc;
