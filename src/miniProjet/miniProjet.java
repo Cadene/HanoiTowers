@@ -10,7 +10,13 @@ public class miniProjet {
 	{
 		//Traversee.main();
 		
-		HanoiTowers.main1();
+		//HanoiTowers.main1();
+		
+		//HanoiTowers.mainRec();
+		
+		//HanoiTowers.main2();
+		
+		HanoiTowers.main3();
 	}
 
 }

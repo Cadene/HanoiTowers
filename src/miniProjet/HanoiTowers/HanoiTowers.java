@@ -15,10 +15,34 @@ public class HanoiTowers {
 		
 		String string = "= = Hanoi1 = =\n\n";
 		
+		int nbDisques = 3;
+		GraphConfig gc = new GraphConfig(nbDisques);
+		Config first = ConfigFactory.makeFirst(nbDisques);
+		
+		string += toKey( gc.hanoi1( first ) );
+		string += "\n\n";
+		
 		string += "Courbe :\n...\n";
 		System.out.println(string);
-		HanoiTowers.generateCurveCPU(10,1);
+		GenerateCurve.hanoi1(10,1);
 		string = "new data in 'miniProjet/data/hanoi1'";
+		string += "\n\n";
+
+		System.out.println(string);
+		
+	}
+	
+	public static void mainRec() {
+		
+		String string = "= = HanoiRec = =\n\n";
+		
+		int nbDisques = 3;
+		int fromStack = 0;
+		int toStack = 2;
+		GraphConfig gc = new GraphConfig(nbDisques);
+		
+		string += toKey( gc.hanoi(nbDisques, fromStack, toStack) );
+		string += "\n\n";
 
 		System.out.println(string);
 		
@@ -28,25 +52,60 @@ public class HanoiTowers {
 	
 		String string = "= = Hanoi2 = =\n\n";
 		
-		string += "Hanoi Recursif :\n";
-		string += HanoiTowers.toKey( gc.hanoi(gc.n, 0, 2) );
-		string += "\n";
+		int nbDisques = 2;
+		GraphConfig gc = new GraphConfig(nbDisques);
+		Config first = ConfigFactory.makeFirst(nbDisques);
 		
-
-		string += "Hanoi1 Random :\n";
-		string += HanoiTowers.toKey( gc.hanoi1( randC.clone() ));
-		string += "\n";
+		string += toKey( gc.hanoi2( first ) );
+		string += "\n\n";
 		
-		string += "Hanoi2 :\n";
-		string += HanoiTowers.toKey( gc.hanoi2( randC.clone() ) );
-		string += "\n";
+		string += "Courbe :\n...\n";
+		System.out.println(string);
+		GenerateCurve.hanoi2(10,1);
+		string = "new data in 'miniProjet/data/hanoi2'";
+		string += "\n\n";
 
-		string += "Hanoi3 :\n";
-		string += gc.hanoi3( randC.clone() );
-		string += "\n";
-		
-
+		System.out.println(string);
 	}
+	
+	
+	
+	public static void main3() {
+		
+		String string = "= = Hanoi3 = =\n\n";
+		
+		Config x;
+ 		ArrayList<Integer> tab = new ArrayList<Integer>();
+ 		
+		for(int i=1; i<=10; i++)
+			tab.add(1);
+		
+		tab.add(3);
+		
+		for(int i=12; i<=18; i++)
+			tab.add(2);
+		
+		for(int i=19; i<=40; i++)
+			tab.add(1);
+		
+		for(int i=41; i<=63; i++)
+			tab.add(3);
+		
+		tab.add(2);
+		
+ 		x = new Config(tab);
+		
+		int nbDisques = 64;
+		GraphConfig gc = new GraphConfig(nbDisques);
+		
+		string +=  gc.hanoi3( x ) ;
+		string += "\n\n";
+
+		System.out.println(string);
+	}
+	
+	
+	
 	
 	
 	
@@ -74,45 +133,6 @@ public class HanoiTowers {
 		return s;
 	}
 	
-	private static void generateCurveCPU(int maxN, int every)
-	{
-		long startTime, endTime;
-		GraphConfig gc;
-		Config rand;
-
-		int moyenne = 50;
-		
-	    try{
-	    	String fileName = "./data/hanoi1/"+maxN+":"+every+".txt";
-			PrintWriter out  = new PrintWriter(new FileWriter(fileName));
-	    	
-			int i=0;
-			for(int n=1; n <= maxN; n=n+every)
-			{
-				gc = new GraphConfig(n);
-				startTime = 0;
-				endTime = 0;
-				for(int m=1; m <= moyenne; m++)
-				{
-					rand = ConfigFactory.makeRandom(n);
-					//System.out.println(rand.toString());
-					startTime += System.nanoTime();
-					gc.hanoi1( rand  );
-					endTime += System.nanoTime();
-				}
-
-				out.println(n + ";" + ( (endTime - startTime) / moyenne) );
-				if(n>i){
-					System.out.println(n);
-					i+=1;
-				}
-			}
-		
-			out.close();
-	    }
-	    catch(Exception e){
-	      e.printStackTrace();
-	    }
-	}
+	
 
 }

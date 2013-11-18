@@ -1,5 +1,6 @@
 package miniProjet.HanoiTowers;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class GraphConfig {
 		return n;
 	}
 	
-
+    /* Hanoi1 */
 	
 	public ArrayList<Config> generateNext(Config c)
 	{	
@@ -149,6 +150,8 @@ public class GraphConfig {
 	}
 	
 	
+	/* HanoiRec */
+	
 	public void hanoiRec(Config first, LinkedList<Config> path, int n, int fromStack, int tempStack, int toStack)
 	{
 		if(n > 0)
@@ -173,6 +176,36 @@ public class GraphConfig {
 		path.add(first.clone());
 		
 		this.hanoiRec(first, path, n, fromStack, 3-fromStack-toStack, toStack);
+		
+		return path;
+	}
+	
+	/* Hanoi 2 */
+	
+	public LinkedList<Config> hanoi2(Config first)
+	{
+		LinkedList<Config> path = new LinkedList<Config>();
+		ArrayList<Integer> Pi = makePi(first);
+		ArrayList<Integer> Pf = makePf(Pi);
+		
+		int n = first.getNbRings();
+		int from, temp, to;
+		
+		path.add(first.clone());
+		
+		for(int d=1; d<=n; d++)
+		{
+			if(Pi.get(d) != Pf.get(d))
+			{
+				first.move(Pi.get(d), Pf.get(d));
+				path.add(first.clone());
+				
+				from = 3 - Pi.get(d) - Pf.get(d);
+				to = Pf.get(d);
+				temp = getTemp(from, to);
+				this.hanoiRec(first, path, d-1, from, temp, to);
+			}
+		}
 		
 		return path;
 	}
@@ -221,37 +254,12 @@ public class GraphConfig {
 		return 3 - from - to;
 	}
 	
-	public LinkedList<Config> hanoi2(Config first)
-	{
-		LinkedList<Config> path = new LinkedList<Config>();
-		ArrayList<Integer> Pi = makePi(first);
-		ArrayList<Integer> Pf = makePf(Pi);
-		
-		int n = first.getNbRings();
-		int from, temp, to;
-		
-		path.add(first.clone());
-		
-		for(int d=1; d<=n; d++)
-		{
-			if(Pi.get(d) != Pf.get(d))
-			{
-				first.move(Pi.get(d), Pf.get(d));
-				path.add(first.clone());
-				
-				from = 3 - Pi.get(d) - Pf.get(d);
-				to = Pf.get(d);
-				temp = getTemp(from, to);
-				this.hanoiRec(first, path, d-1, from, temp, to);
-			}
-		}
-		
-		return path;
-	}
 	
-	public int hanoi3(Config first)
+	/* Hanoi3 */
+	
+	public BigInteger hanoi3(Config first)
 	{
-		int nbMove = 0;
+		BigInteger nbMove = BigInteger.valueOf(0);
 		int n = first.getNbRings();
 		
 		ArrayList<Integer> Pi = makePi(first);
@@ -262,32 +270,22 @@ public class GraphConfig {
 			if(Pi.get(d) != Pf.get(d))
 			{
 				//first.move(Pi.get(d), Pf.get(d));
-				nbMove++;
 				
-				nbMove += getUR(d-1);
+				
+				nbMove = nbMove.add(BigInteger.valueOf(getU(d-1) + 1));
+				
+				//System.out.println(nbMove);
+				
 			}
 		}
 		
 		return nbMove;
 	}
 	
-	public int getU(int n){
+	private int getU(int n){
 		if(n>0)
-			return (int) Math.pow(2, n-1) + n - 1;
+			return (int) Math.pow(2, n) - 1;
 		return 0;
-	}
-	
-	public int getUR(int n){
-		int temp;
-		if(n>1){
-			temp = getUR(n-1);
-			return temp*2+1;
-		}
-		return 1;
-	}
-	
-	public String toString(){
-		return "";
 	}
 	
 }
