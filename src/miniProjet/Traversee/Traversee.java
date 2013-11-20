@@ -1,10 +1,5 @@
 package miniProjet.Traversee;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Traversee {
 
@@ -20,7 +15,7 @@ public class Traversee {
 		
 		
 		string += "Toutes configurations valides :\n";
-		string += Traversee.toString(gc.generateValidConfigs());
+		string += Function.toString(gc.generateValidConfigs());
 		string += "\n";
 		
 		
@@ -30,17 +25,17 @@ public class Traversee {
 		
 		
 		string += "Tout voisins valides de " + first.toString() + " dans " + gc.toString() + " :\n";
-		string += Traversee.toString(gc.generateNext(first));
+		string += Function.toString(gc.generateNext(first));
 		string += "\n";
 		
 		
 		string += "Parcours en largeur du graphe :\n";
-		string += Traversee.toString(gc.breadthFirstSearch(first,last));
+		string += Function.toString(gc.breadthFirstSearch(first,last));
 		string += "\n";
 		
 		
 		string += "Traversee() :\n";
-		string += Traversee.toString(gc.traversee());
+		string += Function.toString(gc.traversee());
 		string += "\n";
 		
 		
@@ -48,7 +43,7 @@ public class Traversee {
 		
 		System.out.println(string);
 		
-		GenerateCurve.traversee(30000,6);
+		//GenerateCurve.traversee(30000,50);
 		string = "new data in 'miniProjet/data/traversee'";
 		
 		System.out.println(string);
@@ -56,28 +51,5 @@ public class Traversee {
 	
 	
 	
-	public static String toString(LinkedList<Config> configs){
-		String s = "";
-		for(Config conf : configs){
-			s += conf.toString() + "\n";
-		}
-		return s;
-	}
-	
-	public static String toString(ArrayList<Config> configs){
-		String s = "";
-		for(Config conf : configs){
-			s += conf.toString() + "\n";
-		}
-		return s;
-	}
-	
-	public static String toString(HashMap<String,Integer> configs){
-		String s = "";
-		/*for(Config key : configs.keySet()){
-			s += key.toString() + " : " + configs.get(key).toString() + "\n";
-		}*/
-		return s;
-	}
 
 }

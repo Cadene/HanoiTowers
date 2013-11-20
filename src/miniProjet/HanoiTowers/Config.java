@@ -87,6 +87,7 @@ public class Config {
 		return s;
 	}
 
+	
 	public Config clone()
 	{
 		Config conf = new Config();

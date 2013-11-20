@@ -1,10 +1,6 @@
 package miniProjet.HanoiTowers;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import miniProjet.HanoiTowers.Config;
 import miniProjet.HanoiTowers.GraphConfig;
@@ -19,12 +15,12 @@ public class HanoiTowers {
 		GraphConfig gc = new GraphConfig(nbDisques);
 		Config first = ConfigFactory.makeFirst(nbDisques);
 		
-		string += toKey( gc.hanoi1( first ) );
+		string += Function.toKey( gc.hanoi1( first ) );
 		string += "\n\n";
 		
 		string += "Courbe :\n...\n";
 		System.out.println(string);
-		GenerateCurve.hanoi1(10,1);
+		GenerateCurve.hanoi1(15,1);
 		string = "new data in 'miniProjet/data/hanoi1'";
 		string += "\n\n";
 
@@ -41,7 +37,7 @@ public class HanoiTowers {
 		int toStack = 2;
 		GraphConfig gc = new GraphConfig(nbDisques);
 		
-		string += toKey( gc.hanoi(nbDisques, fromStack, toStack) );
+		string += Function.toKey( gc.hanoi(nbDisques, fromStack, toStack) );
 		string += "\n\n";
 
 		System.out.println(string);
@@ -56,12 +52,12 @@ public class HanoiTowers {
 		GraphConfig gc = new GraphConfig(nbDisques);
 		Config first = ConfigFactory.makeFirst(nbDisques);
 		
-		string += toKey( gc.hanoi2( first ) );
+		string += Function.toKey( gc.hanoi2( first ) );
 		string += "\n\n";
 		
 		string += "Courbe :\n...\n";
 		System.out.println(string);
-		GenerateCurve.hanoi2(10,1);
+		GenerateCurve.hanoi2(17,1);
 		string = "new data in 'miniProjet/data/hanoi2'";
 		string += "\n\n";
 
@@ -98,6 +94,8 @@ public class HanoiTowers {
 		int nbDisques = 64;
 		GraphConfig gc = new GraphConfig(nbDisques);
 		
+		x = ConfigFactory.makeFirst(8);
+		
 		string +=  gc.hanoi3( x ) ;
 		string += "\n\n";
 
@@ -108,30 +106,6 @@ public class HanoiTowers {
 	
 	
 	
-	
-	private static String toString(ArrayList<Config> configs){
-		String s = "";
-		for(Config conf : configs){
-			s += conf.toString() + "\n";
-		}
-		return s;
-	}
-	
-	private static String toKey(LinkedList<Config> configs){
-		String s = "";
-		for(Config c : configs){
-			s += "(" + c.toKey(c.getNbRings()) + ")\n";
-		}
-		return s;
-	}
-	
-	private static String toKey(HashMap<String,Integer> configs){
-		String s = "";
-		for(String key : configs.keySet()){
-			s += "(" + key + ") : " + configs.get(key) + "\n";
-		}
-		return s;
-	}
 	
 	
 

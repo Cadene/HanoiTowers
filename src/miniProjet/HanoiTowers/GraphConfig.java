@@ -2,7 +2,6 @@ package miniProjet.HanoiTowers;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -260,6 +259,7 @@ public class GraphConfig {
 	public BigInteger hanoi3(Config first)
 	{
 		BigInteger nbMove = BigInteger.valueOf(0);
+		BigInteger nb = BigInteger.valueOf(0);
 		int n = first.getNbRings();
 		
 		ArrayList<Integer> Pi = makePi(first);
@@ -270,16 +270,13 @@ public class GraphConfig {
 			if(Pi.get(d) != Pf.get(d))
 			{
 				//first.move(Pi.get(d), Pf.get(d));
-				
-				
 				nbMove = nbMove.add(BigInteger.valueOf(getU(d-1) + 1));
-				
 				//System.out.println(nbMove);
-				
+				nb = nb.add(BigInteger.valueOf(1));
 			}
 		}
 		
-		return nbMove;
+		return nb;
 	}
 	
 	private int getU(int n){
