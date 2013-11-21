@@ -88,6 +88,7 @@ public class Config {
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	public Config clone()
 	{
 		Config conf = new Config();
