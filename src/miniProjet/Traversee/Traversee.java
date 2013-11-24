@@ -43,10 +43,11 @@ public class Traversee {
 		
 		System.out.println(string);
 		
-		//GenerateCurve.traversee(30000,50);
+		GenerateCurve.traversee(30000,5000);
+		
 		string = "new data in 'miniProjet/data/traversee'";
 		
-		System.out.println(string);
+		System.out.println(string + "\n\n\n");
 	}
 	
 	

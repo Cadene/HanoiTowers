@@ -1,5 +1,6 @@
 package miniProjet.HanoiTowers;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import miniProjet.HanoiTowers.Config;
@@ -20,11 +21,11 @@ public class HanoiTowers {
 		
 		string += "Courbe :\n...\n";
 		System.out.println(string);
-		GenerateCurve.hanoi1(15,1);
+		GenerateCurve.hanoi1(8,1);
 		string = "new data in 'miniProjet/data/hanoi1'";
 		string += "\n\n";
 
-		System.out.println(string);
+		System.out.println(string + "\n\n\n");
 		
 	}
 	
@@ -57,11 +58,11 @@ public class HanoiTowers {
 		
 		string += "Courbe :\n...\n";
 		System.out.println(string);
-		GenerateCurve.hanoi2(17,1);
+		GenerateCurve.hanoi2(15,1);
 		string = "new data in 'miniProjet/data/hanoi2'";
 		string += "\n\n";
 
-		System.out.println(string);
+		System.out.println(string + "\n\n\n");
 	}
 	
 	
@@ -90,16 +91,25 @@ public class HanoiTowers {
 		tab.add(2);
 		
  		x = new Config(tab);
+ 		
+ 		string += Math.pow(2, 64) + "\n";
+ 		string += (long) Math.pow(2, 64) + "\n";
+ 		string += (int) Math.pow(2, 64) + "\n\n";
+ 		
+ 		//string += bi. + "\n";
+ 		
+ 		string += x.toString() + "\n";
 		
 		int nbDisques = 64;
 		GraphConfig gc = new GraphConfig(nbDisques);
 		
-		x = ConfigFactory.makeFirst(8);
-		
-		string +=  gc.hanoi3( x ) ;
+		BigInteger bi = gc.hanoi3( x );
+		string +=  bi + " secondes\n";
+		bi = bi.divide(BigInteger.valueOf(31536000));
+		string +=  bi + " annees\n";
 		string += "\n\n";
 
-		System.out.println(string);
+		System.out.println(string + "\n\n\n");
 	}
 	
 	

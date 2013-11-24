@@ -4,7 +4,6 @@ import miniProjet.HanoiTowers.HanoiTowers;
 import miniProjet.Traversee.Traversee;
 
 
-@SuppressWarnings("unused")
 public class miniProjet {
 
 	public static void main(String[] args)
